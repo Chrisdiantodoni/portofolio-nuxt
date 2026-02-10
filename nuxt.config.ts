@@ -7,11 +7,11 @@ export default defineNuxtConfig({
     "@nuxt/content",
     "@vueuse/nuxt",
     "nuxt-og-image",
-    "motion-v/nuxt"
+    "motion-v/nuxt",
   ],
 
   devtools: {
-    enabled: true
+    enabled: true,
   },
 
   css: ["~/assets/css/main.css"],
@@ -21,16 +21,20 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ["/"],
-      crawlLinks: true
-    }
+      crawlLinks: true,
+    },
   },
-
+  vite: {
+    build: {
+      minify: "esbuild", // Use esbuild instead of oxc
+    },
+  },
   eslint: {
     config: {
       stylistic: {
         commaDangle: "never",
-        braceStyle: "1tbs"
-      }
-    }
-  }
-})
+        braceStyle: "1tbs",
+      },
+    },
+  },
+});

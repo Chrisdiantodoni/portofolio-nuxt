@@ -13,7 +13,7 @@ importers:
         version: 0.3.15
       '@iconify-json/lucide':
         specifier: ^1.2.89
-        version: 1.2.89
+        version: 1.2.90
       '@iconify-json/simple-icons':
         specifier: ^1.2.70
         version: 1.2.70
@@ -885,14 +885,14 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/lucide@1.2.89':
-    resolution: {integrity: sha512-9rZaJZn8VBls1KZnGaFTnqqZrUkd++XB3vy9WYIMgmHHgLxQMEZXg3V+oJSEeit0kCNr/OfDBmrDwuGl/LZulA==}
+  '@iconify-json/lucide@1.2.90':
+    resolution: {integrity: sha512-dPn1pRhfBa9KR+EVpdyM1Rvw3T36hCKYxd6TxK1ifffiNt0f5yXx8ZVhqnzPH4Vkz87yLMj5xFCXomNrnzd2kQ==}
 
   '@iconify-json/simple-icons@1.2.70':
     resolution: {integrity: sha512-CYNRCgN6nBTjN4dNkrBCjHXNR2e4hQihdsZUs/afUNFOWLSYjfihca4EFN05rRvDk4Xoy2n8tym6IxBZmcn+Qg==}
 
-  '@iconify/collections@1.0.648':
-    resolution: {integrity: sha512-0365h8NN+PXjUXc32cmaQaulext6S6Jnx1+6XxU5ivzNiQWmMlh6W1BkF9wncH+e48yzL1Tqes2A17WwYieZtw==}
+  '@iconify/collections@1.0.649':
+    resolution: {integrity: sha512-PQu7FT3kDHgFGzbFrGCd5aUgULmXTyVxWbC7reEdSGPsexcF9pQCBLiRN71p4og6VtLp/3txiNVbYTYhnOPHQA==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -8041,7 +8041,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@iconify-json/lucide@1.2.89':
+  '@iconify-json/lucide@1.2.90':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -8049,7 +8049,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/collections@1.0.648':
+  '@iconify/collections@1.0.649':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -8568,7 +8568,7 @@ snapshots:
 
   '@nuxt/icon@2.2.1(magicast@0.5.2)(vite@7.3.1(@types/node@25.2.2)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.5.28(typescript@5.9.3))':
     dependencies:
-      '@iconify/collections': 1.0.648
+      '@iconify/collections': 1.0.649
       '@iconify/types': 2.0.0
       '@iconify/utils': 3.1.0
       '@iconify/vue': 5.0.0(vue@3.5.28(typescript@5.9.3))
