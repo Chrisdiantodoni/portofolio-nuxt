@@ -11,4 +11,5 @@ export const profile = pgTable("profile", {
   status: varchar("status", { length: 100 }), // "Available for new projects"
   email: varchar("email", { length: 255 }),
   avatarUrl: text("avatar_url"),
+  cvUrl: text("cv_url"),
 });

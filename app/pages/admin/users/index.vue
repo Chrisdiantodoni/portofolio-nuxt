@@ -4,6 +4,7 @@ import { upperFirst } from "scule";
 import { getPaginationRowModel } from "@tanstack/table-core";
 import type { Row } from "@tanstack/table-core";
 import type { User } from "~/types";
+import { watchDebounced } from "@vueuse/core";
 
 const UAvatar = resolveComponent("UAvatar");
 const UButton = resolveComponent("UButton");
@@ -18,6 +19,27 @@ definePageMeta({
   title: "Users",
 });
 
+const page = ref(1);
+const limit = ref(10);
+const search = ref("");
+const searchValue = ref("");
+
+// Fetching data dari server (Gunakan API get list yang kita buat tadi)
+const {
+  data: apiResponse,
+  status,
+  refresh,
+} = await useFetch("/api/user/list", {
+  query: {
+    page: page,
+    limit: limit,
+    search: search,
+  },
+  watch: [page, search], // Otomatis fetch ulang jika page/search berubah
+});
+const users = computed(() => apiResponse.value?.data || []);
+const totalUsers = computed(() => apiResponse.value?.meta?.total || 0);
+
 const columnFilters = ref([
   {
     id: "email",
@@ -27,9 +49,8 @@ const columnFilters = ref([
 const columnVisibility = ref();
 const rowSelection = ref({ 1: true });
 
-const { data, status } = await useFetch<User[]>("/api/customers", {
-  lazy: true,
-});
+const isAddModalOpen = ref(false);
+const selectedUser = ref<any | null>(null);
 
 function getRowItems(row: Row<User>) {
   return [
@@ -38,38 +59,30 @@ function getRowItems(row: Row<User>) {
       label: "Actions",
     },
     {
-      label: "Copy customer ID",
-      icon: "i-lucide-copy",
+      type: "separator",
+    },
+    {
+      label: "View user details",
+      icon: "i-lucide-list",
       onSelect() {
-        navigator.clipboard.writeText(row.original.id.toString());
-        toast.add({
-          title: "Copied to clipboard",
-          description: "Customer ID copied to clipboard",
-        });
+        selectedUser.value = row.original;
+
+        // 2. Buka modal dari sini
+        isAddModalOpen.value = true;
       },
     },
+
     {
       type: "separator",
     },
     {
-      label: "View customer details",
-      icon: "i-lucide-list",
-    },
-    {
-      label: "View customer payments",
-      icon: "i-lucide-wallet",
-    },
-    {
-      type: "separator",
-    },
-    {
-      label: "Delete customer",
+      label: "Delete user",
       icon: "i-lucide-trash",
       color: "error",
       onSelect() {
         toast.add({
-          title: "Customer deleted",
-          description: "The customer has been deleted.",
+          title: "User deleted",
+          description: "The user has been deleted.",
         });
       },
     },
@@ -106,12 +119,14 @@ const columns: TableColumn<User>[] = [
     cell: ({ row }) => {
       return h("div", { class: "flex items-center gap-3" }, [
         h(UAvatar, {
-          ...row.original.avatar,
+          src: row.original.avatarUrl, // Jika ada
+          alt: row.original.name,
+          text: row.original.name.substring(0, 2).toUpperCase(), // Fallback inisial
           size: "lg",
         }),
         h("div", undefined, [
           h("p", { class: "font-medium text-highlighted" }, row.original.name),
-          h("p", { class: "" }, `@${row.original.name}`),
+          h("p", { class: "" }, `@${row.original.username}`),
         ]),
       ]);
     },
@@ -135,29 +150,25 @@ const columns: TableColumn<User>[] = [
       });
     },
   },
-  {
-    accessorKey: "location",
-    header: "Location",
-    cell: ({ row }) => row.original.location,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    filterFn: "equals",
-    cell: ({ row }) => {
-      const color = {
-        subscribed: "success" as const,
-        unsubscribed: "error" as const,
-        bounced: "warning" as const,
-      }[row.original.status];
 
-      return h(
-        UBadge,
-        { class: "capitalize", variant: "subtle", color },
-        () => row.original.status,
-      );
-    },
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   filterFn: "equals",
+  //   cell: ({ row }) => {
+  //     const color = {
+  //       subscribed: "success" as const,
+  //       unsubscribed: "error" as const,
+  //       bounced: "warning" as const,
+  //     }[row.original.status];
+
+  //     return h(
+  //       UBadge,
+  //       { class: "capitalize", variant: "subtle", color },
+  //       () => row.original.status,
+  //     );
+  //   },
+  // },
   {
     id: "actions",
     cell: ({ row }) => {
@@ -184,39 +195,28 @@ const columns: TableColumn<User>[] = [
     },
   },
 ];
-
-const statusFilter = ref("all");
-
-watch(
-  () => statusFilter.value,
-  (newVal) => {
-    if (!table?.value?.tableApi) return;
-
-    const statusColumn = table.value.tableApi.getColumn("status");
-    if (!statusColumn) return;
-
-    if (newVal === "all") {
-      statusColumn.setFilterValue(undefined);
-    } else {
-      statusColumn.setFilterValue(newVal);
-    }
+// const searchValue = computed({
+//   get: () => search.value,
+//   set: (value: string) => {
+//     search.value = value;
+//     page.value = 1; // Reset ke hal 1 saat mencari
+//   },
+// });
+watchDebounced(
+  searchValue,
+  (newValue) => {
+    search.value = newValue;
+    page.value = 1; // Reset ke halaman 1 setiap kali mencari
   },
+  { debounce: 500, maxWait: 1000 }, // Tunggu 500ms
 );
 
-const email = computed({
-  get: (): string => {
-    return (
-      (table.value?.tableApi?.getColumn("email")?.getFilterValue() as string) ||
-      ""
-    );
-  },
-  set: (value: string) => {
-    table.value?.tableApi
-      ?.getColumn("email")
-      ?.setFilterValue(value || undefined);
-  },
+watch(isAddModalOpen, (value) => {
+  if (!value) {
+    selectedUser.value = null;
+  }
 });
-
+const statusFilter = ref("all");
 const pagination = ref({
   pageIndex: 0,
   pageSize: 10,
@@ -224,17 +224,19 @@ const pagination = ref({
 </script>
 
 <template>
-  <UDashboardPanel class="flex flex-col h-full overflow-hidden">
-    <UDashboardToolbar class="my-2">
-      <template #right>
-        <UsersAddModal />
-      </template>
-    </UDashboardToolbar>
+  <div class="flex flex-col h-full overflow-hidden">
+    <div class="flex justify-end my-5">
+      <UsersAddModal
+        @success="refresh"
+        v-model:open="isAddModalOpen"
+        :user-data="selectedUser"
+      />
+    </div>
 
     <div class="py-2 border-b border-default space-y-4 bg-background">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <UInput
-          v-model="email"
+          v-model="searchValue"
           class="w-full max-w-sm"
           icon="i-lucide-search"
           placeholder="Filter emails..."
@@ -309,12 +311,11 @@ const pagination = ref({
         ref="table"
         v-model:column-filters="columnFilters"
         v-model:column-visibility="columnVisibility"
-        v-model:row-selection="rowSelection"
         v-model:pagination="pagination"
         :pagination-options="{
           getPaginationRowModel: getPaginationRowModel(),
         }"
-        :data="data"
+        :data="users"
         :columns="columns"
         :loading="status === 'pending'"
         :ui="{
@@ -335,19 +336,26 @@ const pagination = ref({
         </span>
         of
         <span class="font-medium">
-          {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }}
+          {{ apiResponse?.meta?.total || 0 }}
         </span>
         row(s) selected.
       </div>
 
-      <UPagination
+      <!-- <UPagination
         :default-page="
           (table?.tableApi?.getState().pagination.pageIndex || 0) + 1
         "
         :items-per-page="table?.tableApi?.getState().pagination.pageSize"
         :total="table?.tableApi?.getFilteredRowModel().rows.length"
         @update:page="(p: number) => table?.tableApi?.setPageIndex(p - 1)"
+      /> -->
+
+      <UPagination
+        v-model="page"
+        :items-per-page="limit"
+        :total="totalUsers"
+        @update:page="(p: number) => (page = p)"
       />
     </div>
-  </UDashboardPanel>
+  </div>
 </template>

@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-og-image",
     "motion-v/nuxt",
+    "@pinia/nuxt",
   ],
 
   devtools: {

@@ -17,6 +17,7 @@ const main = async () => {
     name: "admin",
     email: "admin@example.com", // Email login nanti
     password: hashedPassword, // <-- Simpan HASIL HASH-nya, bukan "password123"
+    username: "admin",
   });
 
   console.log("✅ User created!");

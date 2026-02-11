@@ -3,6 +3,7 @@ import type { NavigationMenuItem } from "@nuxt/ui";
 import { sub } from "date-fns";
 import type { DropdownMenuItem } from "@nuxt/ui";
 import type { Period, Range } from "~/types";
+import { useAuthStore } from "../stores/auth";
 
 const route = useRoute();
 const toast = useToast();
@@ -228,6 +229,14 @@ const range = shallowRef<Range>({
   end: new Date(),
 });
 const period = ref<Period>("daily");
+
+const auth = useAuthStore();
+
+onMounted(() => {
+  auth.fetchUser();
+});
+
+// Jalankan fetchUser saat aplikasi diinisialisasi
 </script>
 
 <template>

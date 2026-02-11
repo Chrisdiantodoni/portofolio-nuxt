@@ -3,20 +3,9 @@ import {
   serial,
   text,
   varchar,
-  timestamp,
   boolean,
   integer,
 } from "drizzle-orm/pg-core";
-
-export const contacts = pgTable("contacts", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  email: varchar("email", { length: 255 }).notNull(),
-  subject: varchar("subject", { length: 255 }), // Opsional, bisa null
-  message: text("message").notNull(),
-  isRead: boolean("is_read").default(false), // Untuk menandai pesan sudah dibaca/belum
-  createdAt: timestamp("created_at").defaultNow(), // Otomatis mencatat waktu pesan masuk
-});
 
 export const socialLinks = pgTable("social_links", {
   id: serial("id").primaryKey(),
