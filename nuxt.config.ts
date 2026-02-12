@@ -9,7 +9,11 @@ export default defineNuxtConfig({
     "nuxt-og-image",
     "motion-v/nuxt",
     "@pinia/nuxt",
+    "@nuxtjs/cloudinary",
   ],
+  cloudinary: {
+    cloudName: "dinfxtjsv",
+  },
 
   devtools: {
     enabled: true,

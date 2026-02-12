@@ -44,7 +44,7 @@ export const api = {
     return this.request<T>(url, { ...opts, method: "POST", body });
   },
 
-  patch<T>(url: string, body: any, opts?: any) {
+  patch<T>(url: string, body?: any, opts?: any) {
     return this.request<T>(url, { ...opts, method: "PATCH", body });
   },
 

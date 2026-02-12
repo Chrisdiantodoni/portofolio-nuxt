@@ -19,6 +19,7 @@
     "@nuxt/content": "^3.11.2",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.4.0",
+    "@nuxtjs/cloudinary": "^4.0.0",
     "@pinia/nuxt": "0.11.3",
     "@unovis/ts": "^1.6.4",
     "@unovis/vue": "^1.6.4",
@@ -27,6 +28,7 @@
     "add": "^2.0.6",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
+    "cloudinary": "^2.9.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.4",
     "drizzle-orm": "^0.45.1",
@@ -38,6 +40,7 @@
     "pinia": "^3.0.4",
     "postgres": "^3.4.8",
     "tailwindcss": "^4.1.18",
+    "vuedraggable": "^4.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {

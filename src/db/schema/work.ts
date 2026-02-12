@@ -6,5 +6,6 @@ export const workExperience = pgTable("work_experiences", {
   role: varchar("role", { length: 255 }).notNull(),
   period: varchar("period", { length: 100 }).notNull(), // "2023 - Present"
   description: text("description"),
+  icon: text("icon"),
   logoUrl: text("logo_url"),
 });

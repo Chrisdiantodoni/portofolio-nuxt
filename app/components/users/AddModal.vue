@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { useUserForm } from "../../composables/form/useUserForm";
 
 const isOpen = defineModel<boolean>("open", { default: false });
 const emit = defineEmits(["success"]);

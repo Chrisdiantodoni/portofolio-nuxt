@@ -2,6 +2,7 @@
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { refDebounced } from "@vueuse/core";
+import { useTechnologiesForm } from "../../composables/form/useTechnologiesForm";
 
 const isOpen = defineModel<boolean>("open", { default: false });
 const emit = defineEmits(["success"]);

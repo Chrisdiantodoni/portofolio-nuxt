@@ -43,6 +43,14 @@ const links = [
       defaultOpen: true,
       children: [
         {
+          label: "Navigation",
+          to: "/admin/master-data/navigation",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
           label: "Technologies",
           to: "/admin/master-data/technologies",
           exact: true,
@@ -68,7 +76,7 @@ const links = [
     {
       label: "Work Experiences",
       icon: "i-lucide-history",
-      to: "/admin/experiences",
+      to: "/admin/work-experience",
     },
     {
       label: "Articles",
