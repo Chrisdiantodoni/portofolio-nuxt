@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
   // Redirect authenticated users from login page
   if (path === "/auth/login" && token) {
     console.log("➡️ Redirect to /admin (already authenticated)");
-    return sendRedirect(event, "/admin", 302);
+    return sendRedirect(event, "/admin/dashboard", 302);
   }
 
   console.log("✅ Request allowed");
