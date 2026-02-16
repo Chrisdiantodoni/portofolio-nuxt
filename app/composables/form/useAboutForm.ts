@@ -41,8 +41,8 @@ export const useAboutForm = () => {
     location: "",
     status: statusOptions[0]?.value ?? "",
     email: "",
-    avatarUrl: null as File | string | null, // Bisa berupa file baru atau URL string yang sudah ada
-    cvUrl: null as File | string | null,
+    avatarUrl: null as any | File | string | null, // Bisa berupa file baru atau URL string yang sudah ada
+    cvUrl: null as any,
   };
 
   const state = reactive({ ...initialState });

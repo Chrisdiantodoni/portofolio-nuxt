@@ -60,12 +60,6 @@ const icons = computed(() => {
     value: item?.icon,
     icon: item?.icon,
   }));
-
-  // ATAU jika API sudah mengembalikan objects dengan struktur berbeda:
-  // return iconsData.value.map((icon) => ({
-  //   label: icon.name || icon.label,
-  //   value: icon.id || icon.value,
-  // }));
 });
 
 const { addNewTechnologies, updateTechnologies } = useTechnologies();

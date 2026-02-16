@@ -1,5 +1,9 @@
 // server/utils/cloudinary.ts
-import { v2 as cloudinary } from "cloudinary";
+import {
+  v2 as cloudinary,
+  UploadApiOptions,
+  type UploadApiResponse,
+} from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,4 +11,23 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export { cloudinary };
+export const uploadToCloudinary = (
+  buffer: Buffer,
+  options: UploadApiOptions = {},
+): Promise<UploadApiResponse> => {
+  return new Promise((resolve, reject) => {
+    // Pastikan konfigurasi cloudinary sudah di-set (biasanya di plugins atau di sini langsung)
+    cloudinary.uploader
+      .upload_stream(
+        {
+          resource_type: "auto", // Otomatis deteksi gambar/raw/video
+          ...options,
+        },
+        (error, result) => {
+          if (error || !result) return reject(error);
+          resolve(result);
+        },
+      )
+      .end(buffer);
+  });
+};

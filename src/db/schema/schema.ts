@@ -20,7 +20,7 @@ export const users = pgTable("users", {
     .notNull(),
 });
 export * from "./articles";
-export * from "./contact";
+export * from "./social-links";
 export * from "./faqs";
 export * from "./master";
 export * from "./messages";

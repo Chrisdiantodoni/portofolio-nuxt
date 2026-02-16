@@ -1,7 +1,7 @@
 import { db } from "../../../src/index";
 import { profile } from "../../../src/db/schema/profile";
 import { eq } from "drizzle-orm";
-import { cloudinary } from "../../utils/cloudinary";
+import { uploadToCloudinary } from "../../utils/cloudinary";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -36,18 +36,6 @@ export default defineEventHandler(async (event) => {
         data[item.name] = rawValue;
       }
     }
-
-    // Helper Upload
-    const uploadToCloudinary = (buffer: Buffer, options: any) => {
-      return new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(options, (error, result) => {
-            if (error) return reject(error);
-            resolve(result);
-          })
-          .end(buffer);
-      });
-    };
 
     // Ambil data lama dulu untuk fallback URL
     const [existing] = await db

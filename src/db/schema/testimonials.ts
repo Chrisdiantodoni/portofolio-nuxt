@@ -8,3 +8,5 @@ export const testimonials = pgTable("testimonials", {
   content: text("content").notNull(),
   avatarUrl: text("avatar_url"),
 });
+
+export type Testimonial = typeof testimonials.$inferSelect;

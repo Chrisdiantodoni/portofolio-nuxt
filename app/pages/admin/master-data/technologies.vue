@@ -153,67 +153,6 @@ const columns: TableColumn<any>[] = [
           icon="i-lucide-search"
           placeholder="Filter emails..."
         />
-
-        <!-- <div class="flex flex-wrap items-center gap-2">
-          <CustomersDeleteModal
-            :count="table?.tableApi?.getFilteredSelectedRowModel().rows.length"
-          >
-            <UButton
-              v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length"
-              label="Delete"
-              color="error"
-              variant="subtle"
-              icon="i-lucide-trash"
-            >
-              <template #trailing>
-                <UKbd size="sm">
-                  {{
-                    table?.tableApi?.getFilteredSelectedRowModel().rows.length
-                  }}
-                </UKbd>
-              </template>
-            </UButton>
-          </CustomersDeleteModal>
-
-          <USelect
-            v-model="statusFilter"
-            :items="[
-              { label: 'All Status', value: 'all' },
-              { label: 'Subscribed', value: 'subscribed' },
-              { label: 'Unsubscribed', value: 'unsubscribed' },
-              { label: 'Bounced', value: 'bounced' },
-            ]"
-            class="w-40"
-          />
-
-          <UDropdownMenu
-            :items="
-              table?.tableApi
-                ?.getAllColumns()
-                .filter((column: any) => column.getCanHide())
-                .map((column: any) => ({
-                  label: upperFirst(column.id),
-                  type: 'checkbox' as const,
-                  checked: column.getIsVisible(),
-                  onUpdateChecked(checked: boolean) {
-                    table?.tableApi
-                      ?.getColumn(column.id)
-                      ?.toggleVisibility(!!checked);
-                  },
-                  onSelect(e?: Event) {
-                    e?.preventDefault();
-                  },
-                }))
-            "
-            :content="{ align: 'end' }"
-          >
-            <UButton
-              label="Columns"
-              color="neutral"
-              variant="outline"
-              icon="i-lucide-settings-2"
-            />
-          </UDropdownMenu> -->
       </div>
     </div>
     <div class="flex-1 overflow-auto">

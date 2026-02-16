@@ -255,72 +255,84 @@ const getActionItems = (item: any) => [
             <p class="text-xs text-gray-500">Drag the handle to reorder</p>
           </div>
         </template>
+        <ClientOnly>
+          <draggable
+            v-model="navigations"
+            item-key="id"
+            handle=".drag-handle"
+            ghost-class="opacity-50"
+            @start="onDragStart"
+            @end="onDragEnd"
+            class="space-y-2"
+          >
+            <template #item="{ element }">
+              <div
+                class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 group"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="drag-handle text-gray-400 hover:text-primary cursor-grab active:cursor-grabbing"
+                  >
+                    <UIcon name="i-lucide-grip-vertical" class="w-5 h-5" />
+                  </div>
 
-        <draggable
-          v-model="navigations"
-          item-key="id"
-          handle=".drag-handle"
-          ghost-class="opacity-50"
-          @start="onDragStart"
-          @end="onDragEnd"
-          class="space-y-2"
-        >
-          <template #item="{ element }">
-            <div
-              class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 group"
-            >
-              <div class="flex items-center gap-3">
-                <div
-                  class="drag-handle text-gray-400 hover:text-primary cursor-grab active:cursor-grabbing"
-                >
-                  <UIcon name="i-lucide-grip-vertical" class="w-5 h-5" />
+                  <div>
+                    <p class="font-medium text-md">{{ element.label }}</p>
+                    <p class="text-sm text-gray-500">{{ element.link }}</p>
+                  </div>
                 </div>
 
-                <div>
-                  <p class="font-medium text-md">{{ element.label }}</p>
-                  <p class="text-sm text-gray-500">{{ element.link }}</p>
+                <div class="flex items-center gap-2">
+                  <UBadge
+                    size="md"
+                    :color="element.isActive ? 'success' : 'neutral'"
+                  >
+                    {{ element.isActive ? "Active" : "Inactive" }}
+                  </UBadge>
+
+                  <UBadge variant="outline" size="md"
+                    >Order: {{ element.sortOrder }}</UBadge
+                  >
+
+                  <UDropdownMenu
+                    :items="getActionItems(element)"
+                    :popper="{ placement: 'bottom-end' }"
+                  >
+                    <UButton
+                      color="neutral"
+                      variant="ghost"
+                      icon="i-lucide-more-vertical"
+                      class="hover:bg-gray-100 dark:hover:bg-gray-800"
+                    />
+
+                    <template #delete="{ item }">
+                      <span class="text-red-500 flex items-center gap-2">
+                        <UIcon :name="item.icon" class="w-4 h-4" />
+                        <span class="truncate">{{ item.label }}</span>
+                      </span>
+                    </template>
+                  </UDropdownMenu>
                 </div>
               </div>
-
-              <div class="flex items-center gap-2">
-                <UBadge
-                  size="md"
-                  :color="element.isActive ? 'success' : 'neutral'"
-                >
-                  {{ element.isActive ? "Active" : "Inactive" }}
-                </UBadge>
-
-                <UBadge variant="outline" size="md"
-                  >Order: {{ element.sortOrder }}</UBadge
-                >
-
-                <UDropdownMenu
-                  :items="getActionItems(element)"
-                  :popper="{ placement: 'bottom-end' }"
-                >
-                  <UButton
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-more-vertical"
-                    class="hover:bg-gray-100 dark:hover:bg-gray-800"
-                  />
-
-                  <template #delete="{ item }">
-                    <span class="text-red-500 flex items-center gap-2">
-                      <UIcon :name="item.icon" class="w-4 h-4" />
-                      <span class="truncate">{{ item.label }}</span>
-                    </span>
-                  </template>
-                </UDropdownMenu>
-              </div>
+            </template>
+          </draggable>
+          <template #fallback>
+            <div class="space-y-2">
+              <div
+                v-for="i in 3"
+                :key="i"
+                class="h-16 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg"
+              />
             </div>
           </template>
-        </draggable>
-
-        <div v-if="navigations.length === 0" class="text-center py-10">
-          <UIcon name="i-lucide-menu" class="w-12 h-12 mx-auto text-gray-300" />
-          <p class="text-gray-500 mt-2 text-sm">No navigation items found.</p>
-        </div>
+          <div v-if="navigations.length === 0" class="text-center py-10">
+            <UIcon
+              name="i-lucide-menu"
+              class="w-12 h-12 mx-auto text-gray-300"
+            />
+            <p class="text-gray-500 mt-2 text-sm">No navigation items found.</p>
+          </div>
+        </ClientOnly>
       </UCard>
     </div>
   </UContainer>

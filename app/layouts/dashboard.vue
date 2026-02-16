@@ -58,6 +58,14 @@ const links = [
             open.value = false;
           },
         },
+        {
+          label: "Social Links",
+          to: "/admin/master-data/social-links",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
       ],
     },
     {
@@ -98,11 +106,7 @@ const links = [
       icon: "i-lucide-help-circle",
       to: "/admin/faqs",
     },
-    {
-      label: "Contacts",
-      icon: "i-lucide-contact",
-      to: "/admin/contacts",
-    },
+
     // {
     //   label: "Settings",
     //   to: "/admin/settings",
@@ -321,7 +325,9 @@ onMounted(() => {
         </UDashboardNavbar>
       </template>
       <template #body>
-        <slot />
+        <div class="h-full overflow-y-auto">
+          <slot />
+        </div>
       </template>
     </UDashboardPanel>
     <NotificationsSlideover />

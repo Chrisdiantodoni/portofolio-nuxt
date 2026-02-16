@@ -283,7 +283,7 @@ const cvPreview = computed(() => {
                 class="ring-2 ring-primary-500 bg-gray-100 dark:bg-gray-800 shadow-sm"
               />
               <UFileUpload
-                v-model="state.avatarUrl as File"
+                v-model="state.avatarUrl"
                 accept="image/*"
                 label="Upload avatar"
                 class="w-full"

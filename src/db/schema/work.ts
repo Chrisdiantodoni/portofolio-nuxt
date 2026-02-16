@@ -9,3 +9,5 @@ export const workExperience = pgTable("work_experiences", {
   icon: text("icon"),
   logoUrl: text("logo_url"),
 });
+
+export type WorkExperience = typeof workExperience.$inferSelect;
