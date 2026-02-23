@@ -1,4 +1,18 @@
-import { pgTable, serial, text, boolean, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  boolean,
+  timestamp,
+  pgEnum,
+} from "drizzle-orm/pg-core";
+
+export const mailStatusEnum = pgEnum("mail_status", [
+  "inbox",
+  "sent",
+  "trash",
+  "draft",
+]);
 
 export const mails = pgTable("mails", {
   id: serial("id").primaryKey(),
@@ -15,6 +29,7 @@ export const mails = pgTable("mails", {
 
   // Menyimpan tanggal
   date: timestamp("date", { mode: "string" }).notNull(),
+  status: mailStatusEnum("status").default("inbox").notNull(),
 
   // Timestamp record dibuat (optional, best practice)
   createdAt: timestamp("created_at").defaultNow(),

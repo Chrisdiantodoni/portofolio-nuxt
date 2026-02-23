@@ -28,4 +28,5 @@ export * from "./navigation";
 export * from "./profile";
 export * from "./projects";
 export * from "./work";
+export * from "./pages";
 export * from "./testimonials";

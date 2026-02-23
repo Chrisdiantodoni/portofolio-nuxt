@@ -2,6 +2,7 @@
 import { computed, ref, watch } from "vue";
 import { breakpointsTailwind } from "@vueuse/core";
 import type { Mail } from "~/types";
+const apiStore = useApiStore();
 
 definePageMeta({
   title: "Inbox",
@@ -24,7 +25,10 @@ interface MailResponse {
   data: Mail[];
 }
 
-const { data } = await useFetch<MailResponse>("/api/mails");
+const { data, pending, error, refresh } = await apiStore.initData<MailResponse>(
+  "all-mails",
+  () => $fetch("/api/mails"),
+);
 
 const mails = computed(() => data?.value?.data || []);
 
@@ -56,19 +60,6 @@ watch(filteredMails, () => {
     selectedMail.value = null;
   }
 });
-
-watch(
-  selectedMail,
-  (newVal, oldVal) => {
-    console.log("--- Debug selectedMail ---");
-    console.log("Sebelumnya:", oldVal);
-    console.log("Sekarang:", newVal);
-    if (newVal) {
-      console.log("ID yang dipilih:", newVal.id);
-    }
-  },
-  { deep: true },
-);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isMobile = breakpoints.smaller("lg");

@@ -8,6 +8,9 @@ import { useAuthStore } from "../stores/auth";
 const route = useRoute();
 const toast = useToast();
 
+const apiStore = useApiStore();
+const mails = apiStore.getData("all-mails");
+
 const open = ref(false);
 
 const links = [
@@ -23,12 +26,59 @@ const links = [
     {
       label: "Inbox",
       icon: "i-lucide-inbox",
-      to: "/admin/inbox",
-      badge: "4",
-      onSelect: () => {
-        open.value = false;
-      },
+      defaultOpen: true,
+      children: [
+        {
+          label: "All Inboxes",
+          to: "/admin/inbox/all",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
+          label: "Primary",
+          to: "/admin/inbox/primary",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
+          label: "Draft",
+          to: "/admin/inbox/draft",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
+          label: "Archive",
+          to: "/admin/inbox/archive",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
+          label: "Trash",
+          to: "/admin/inbox/trash",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+      ],
     },
+    // {
+    //   label: "Inbox",
+    //   icon: "i-lucide-inbox",
+    //   to: "/admin/inbox",
+    //   badge: "4",
+    //   onSelect: () => {
+    //     open.value = false;
+    //   },
+    // },
     {
       label: "Customers",
       icon: "i-lucide-users",
@@ -106,7 +156,11 @@ const links = [
       icon: "i-lucide-help-circle",
       to: "/admin/faqs",
     },
-
+    {
+      label: "SEO Settings",
+      icon: "i-lucide-search-check",
+      to: "/admin/seo",
+    },
     // {
     //   label: "Settings",
     //   to: "/admin/settings",
