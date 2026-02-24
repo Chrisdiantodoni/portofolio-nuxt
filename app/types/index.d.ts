@@ -16,10 +16,12 @@ export interface Mail {
   id: number;
   unread?: boolean;
   senderName: string;
+  senderEmail: string;
   senderMail: string;
   createdAt: string;
   subject: string;
   body: string;
+  status: string;
   date: string;
 }
 

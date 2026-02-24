@@ -14,9 +14,20 @@ export default defineNuxtConfig({
   cloudinary: {
     cloudName: "dinfxtjsv",
   },
+  routeRules: {
+    // Halaman utama diperbarui di latar belakang setiap jam (Hybrid)
+    "/": process.env.NODE_ENV === "production" ? { isr: 3600 } : {},
+    "/api/**": { cors: true },
+  },
 
   devtools: {
     enabled: true,
+  },
+  runtimeConfig: {
+    // runtimeConfig di tingkat root hanya bisa diakses di Server Side
+    gmailUser: process.env.GMAIL_USER,
+    gmailPassword: process.env.GMAIL_APP_PASSWORD,
+    gmailName: process.env.GMAIL_SENDER_NAME,
   },
 
   css: ["~/assets/css/main.css"],

@@ -12,6 +12,7 @@ export const mailStatusEnum = pgEnum("mail_status", [
   "sent",
   "trash",
   "draft",
+  "archive",
 ]);
 
 export const mails = pgTable("mails", {
@@ -23,7 +24,7 @@ export const mails = pgTable("mails", {
   // Data email utama
   subject: text("subject").notNull(),
   body: text("body").notNull(), // Menggunakan text karena body email panjang
-
+  to: text("to"),
   // Default unread adalah false jika tidak didefinisikan
   unread: boolean("unread").default(false).notNull(),
 

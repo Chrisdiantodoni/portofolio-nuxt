@@ -1,10 +1,12 @@
-// server/api/mails/[id]/read.patch.ts
+// server/api/mails/[id]/trash.delete.ts
 import { db } from "../../../../src/index";
-import { eq } from "drizzle-orm";
 import { mails } from "~~/src/db/schema/messages";
+import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
+  const body = await readBody(event);
+  const config = useRuntimeConfig(event);
 
   if (!id) {
     throw createError({
@@ -12,26 +14,27 @@ export default defineEventHandler(async (event) => {
       statusMessage: "ID tidak ditemukan",
     });
   }
-
   try {
-    // Langsung update tanpa perlu findFirst dulu (lebih cepat)
     const result = await db
       .update(mails)
-      .set({ unread: false })
-      .where(eq(mails.id, Number(id))) // Jika ID kamu UUID/String. Kalau Serial/Int gunakan Number(id)
-      .returning(); // Mengembalikan data yang diupdate (optional)
-
-    if (result.length === 0) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: "Pesan tidak ditemukan",
-      });
-    }
+      .set({
+        senderName: config.gmailName,
+        senderEmail: config.gmailUser,
+        to: body.to,
+        subject: body.subject,
+        body: body.body,
+        unread: false,
+        status: "draft",
+        date: new Date().toISOString(),
+      })
+      .where(eq(mails.id, Number(id)))
+      .returning();
 
     return {
+      success: true,
       statusCode: 200,
-      message: `Mail ${id} marked as read`,
-      data: result[0],
+      message: `Mail ${id} moved to draft`,
+      id: id,
     };
   } catch (error: any) {
     throw createError({

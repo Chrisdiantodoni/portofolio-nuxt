@@ -53,6 +53,14 @@ const links = [
           },
         },
         {
+          label: "Sent",
+          to: "/admin/inbox/sent",
+          exact: true,
+          onSelect: () => {
+            open.value = false;
+          },
+        },
+        {
           label: "Archive",
           to: "/admin/inbox/archive",
           exact: true,
@@ -60,6 +68,7 @@ const links = [
             open.value = false;
           },
         },
+
         {
           label: "Trash",
           to: "/admin/inbox/trash",

@@ -1,20 +1,20 @@
 <script setup lang="ts">
-const { footer } = useAppConfig()
+defineProps<{
+  // Gunakan tipe Button dari Nuxt UI karena kita akan v-bind ke UButton
+  footer_links?: any;
+}>();
 </script>
 
 <template>
-  <UFooter
-    class="z-10 bg-default"
-    :ui="{ left: 'text-muted text-xs' }"
-  >
+  <UFooter class="z-10 bg-default" :ui="{ left: 'text-muted text-xs' }">
     <template #left>
-      {{ footer.credits }}
+      © {{ new Date().getFullYear() }} — All rights reserved.
     </template>
 
     <template #right>
-      <template v-if="footer?.links">
+      <template v-if="footer_links">
         <UButton
-          v-for="(link, index) of footer?.links"
+          v-for="(link, index) of footer_links"
           :key="index"
           v-bind="{ size: 'xs', color: 'neutral', variant: 'ghost', ...link }"
         />

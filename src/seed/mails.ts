@@ -9,7 +9,7 @@ async function seed() {
   const dummyMails = [
     {
       senderName: "Jordan Smith",
-      senderEmail: "jordan.smith@example.com",
+      senderEmail: "chrisdiantodoni@gmail.com",
       senderAvatarSrc: "https://i.pravatar.cc/150?u=jordan",
       subject: "Project Update: Q1 Goals",
       body: "Hi Team, I've attached the latest report regarding our Q1 goals. Please review it before our meeting tomorrow. Best, Jordan.",
@@ -18,7 +18,7 @@ async function seed() {
     },
     {
       senderName: "Sarah Connor",
-      senderEmail: "sarah.c@techcorp.io",
+      senderEmail: "chrisdiantodoni@gmail.com",
       senderAvatarSrc: "https://i.pravatar.cc/150?u=sarah",
       subject: "Question about the new UI",
       body: "Hey! I was looking at the new Dashboard UI and I have some feedback regarding the color palette. Can we jump on a quick call?",

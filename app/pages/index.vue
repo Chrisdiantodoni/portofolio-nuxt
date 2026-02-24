@@ -1,4 +1,12 @@
 <script setup lang="ts">
+const { data: homeData, pending } = await useAsyncData("landing-home", () => {
+  return $fetch("/api/landing/home");
+});
+
+console.log(
+  cleanMarkdown(homeData.value?.data?.profile?.about_page),
+  homeData.value,
+);
 const { data: page } = await useAsyncData("index", () => {
   return queryCollection("index").first();
 });

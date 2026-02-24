@@ -4,6 +4,7 @@ import {
   varchar,
   text,
   timestamp,
+  serial,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
@@ -18,6 +19,13 @@ export const users = pgTable("users", {
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
+});
+
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  pagePath: text("page_path").notNull(), // Contoh: '/', '/projects', '/about'
+  ipAddress: text("ip_address"), // Opsional: untuk filter bot/spam
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 export * from "./articles";
 export * from "./social-links";

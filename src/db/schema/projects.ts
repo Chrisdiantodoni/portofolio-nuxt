@@ -28,6 +28,7 @@ export const projects = pgTable("projects", {
   type: varchar("type", { length: 50 }).notNull().default("web"),
   year: integer("year").notNull(),
   slug: varchar("slug", { length: 255 }).unique().notNull(),
+  viewCount: integer("view_count").default(0).notNull(),
   imageUrl: text("image_url"),
   isActive: boolean("is_active").default(true),
 });

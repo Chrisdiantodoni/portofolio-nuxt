@@ -20,7 +20,7 @@ const tabItems = [
 
 const page = ref(1);
 const limit = ref(10);
-const status = ref("trash"); // inbox, archive, trash, draft
+const status = ref("sent"); // inbox, archive, trash, draft
 const selectedTab = ref("all"); // all, unread
 
 // Gunakan computed untuk query agar useFetch otomatis refresh saat nilai berubah
