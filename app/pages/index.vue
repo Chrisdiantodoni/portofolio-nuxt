@@ -1,44 +1,48 @@
 <script setup lang="ts">
-const { data: homeData, pending } = await useAsyncData("landing-home", () => {
-  return $fetch("/api/landing/home");
-});
+const {
+  data: homeData,
+  pending,
+  error,
+} = await useAsyncData("landing-home", () => $fetch("/api/landing/home"));
 
-console.log(
-  cleanMarkdown(homeData.value?.data?.profile?.about_page),
-  homeData.value,
-);
-const { data: page } = await useAsyncData("index", () => {
-  return queryCollection("index").first();
-});
-if (!page.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Page not found",
-    fatal: true,
-  });
-}
+const profile = computed(() => homeData.value?.profile);
+const seo = computed(() => homeData.value?.seo);
 
 useSeoMeta({
-  title: page.value?.seo.title || page.value?.title,
-  ogTitle: page.value?.seo.title || page.value?.title,
-  description: page.value?.seo.description || page.value?.description,
-  ogDescription: page.value?.seo.description || page.value?.description,
+  title: () => seo.value?.title || profile.value?.name || "Portfolio",
+  description: () =>
+    seo.value?.description ||
+    cleanMarkdown(profile.value?.headline) ||
+    "Developer Portfolio",
+  ogTitle: () => seo.value?.title || profile.value?.name,
+  ogImage: () => profile.value?.avatarUrl, // Tambahan standar untuk SEO
 });
+console.log(homeData.value, "data");
 </script>
 
 <template>
-  <UPage v-if="page">
-    <LandingHero :page />
+  <div v-if="pending" class="flex h-96 items-center justify-center">
+    <UIcon
+      name="i-heroicons-arrow-path"
+      class="animate-spin size-10 text-primary"
+    />
+  </div>
+  <div v-else-if="error || !homeData" class="text-center py-20">
+    <p>Gagal memuat data dari Neon.</p>
+    <UButton label="Refresh" @click="refreshNuxtData('landing-home')" />
+  </div>
+  <UPage v-else :key="homeData?.profile?.id">
+    <LandingHero :page="homeData" />
     <UPageSection
       :ui="{
         container: '!pt-0 lg:grid lg:grid-cols-2 lg:gap-8',
       }"
     >
-      <LandingAbout :page />
-      <LandingWorkExperience :page />
+      <LandingAbout :page="homeData" />
+      <LandingWorkExperience :page="homeData" />
     </UPageSection>
-    <LandingBlog :page />
-    <LandingTestimonials :page />
-    <LandingFAQ :page />
+    <LandingBlog :page="homeData" />
+    <!-- <LandingTestimonials :page />
+    <LandingFAQ :page /> -->
   </UPage>
 </template>

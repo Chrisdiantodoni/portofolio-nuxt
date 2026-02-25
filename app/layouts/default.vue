@@ -1,10 +1,18 @@
 <script setup lang="ts">
-const { data } = useFetch("/api/landing/nav");
+import { useNavStore } from "~/stores/nav";
+import { storeToRefs } from "pinia";
 import type { NavigationMenuItem } from "@nuxt/ui";
 
+const store = useNavStore();
+
+// Gunakan await hanya jika ini di layout/page agar SSR berjalan sempurna
+await store.fetchNav();
+
+const { navbar, footer } = storeToRefs(store);
+
 const navLinks = computed<NavigationMenuItem[]>(() => {
-  // Jika data belum ada, kembalikan array kosong
-  const links = data?.value?.data?.nav?.map((item) => ({
+  // PENTING: Gunakan navbar.value
+  const links = navbar.value?.map((item: any) => ({
     label: item?.label,
     to: item?.link,
   }));
@@ -13,11 +21,12 @@ const navLinks = computed<NavigationMenuItem[]>(() => {
 });
 
 const socialLinks = computed(() => {
-  const social_links = data?.value?.data?.socialLinks?.map((item) => ({
+  // PENTING: Gunakan footer.value
+  const social_links = footer.value?.map((item: any) => ({
     icon: item.icon,
     to: item?.url,
     target: "_blank",
-    "aria-label": `Nuxt UI on ${item?.platform}`,
+    "aria-label": `Social on ${item?.platform}`,
   }));
   return social_links ?? [];
 });

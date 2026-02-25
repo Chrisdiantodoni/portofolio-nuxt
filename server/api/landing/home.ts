@@ -35,15 +35,13 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      data: {
-        profile: profile || null,
-        projects: allProjects || [],
-        work_experience: allExperiences || [],
-        blogs: allBlogs || [],
-        testimonials: allTestimonials || [],
-        faqs: allFaqs || [],
-        seo: seo || null,
-      },
+      profile: profile || null,
+      projects: allProjects || [],
+      work_experiences: allExperiences || [],
+      blogs: allBlogs || [],
+      testimonials: allTestimonials || [],
+      faqs: allFaqs || [],
+      seo: seo || null,
     };
   } catch (error: any) {
     throw createError({
