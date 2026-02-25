@@ -1,48 +1,48 @@
-import {
-  pgTable,
-  serial,
-  varchar,
-  text,
-  integer,
-  uuid,
-  boolean,
-  pgEnum,
-} from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { sql, relations } from "drizzle-orm";
 import { technologies } from "./master";
-export const projectTypeEnum = pgEnum("project_type", [
-  "web",
-  "mobile",
-  "desktop",
-  "game",
-]);
 
-export const projects = pgTable("projects", {
-  id: uuid("id")
+// SQLite tidak mendukung pgEnum, jadi kita definisikan tipenya di kolom
+export const projects = sqliteTable("projects", {
+  // Gunakan text untuk UUID di SQLite
+  id: text("id")
     .primaryKey()
-    .default(sql`gen_random_uuid()`),
-  title: varchar("title", { length: 255 }).notNull(),
+    .default(sql`(lower(hex(randomblob(16))))`),
+
+  title: text("title").notNull(),
   description: text("description").notNull(),
   projectLink: text("project_link"),
   githubLink: text("github_link"),
-  type: varchar("type", { length: 50 }).notNull().default("web"),
+
+  // Pengganti Enum
+  type: text("type", { enum: ["web", "mobile", "desktop", "game"] })
+    .notNull()
+    .default("web"),
+
   year: integer("year").notNull(),
-  slug: varchar("slug", { length: 255 }).unique().notNull(),
+  slug: text("slug").unique().notNull(),
   viewCount: integer("view_count").default(0).notNull(),
   imageUrl: text("image_url"),
-  isActive: boolean("is_active").default(true),
+
+  // Boolean mode untuk SQLite
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
 });
 
-export const projectTechnologies = pgTable("project_technologies", {
-  id: serial("id").primaryKey(),
-  projectId: uuid("project_id")
+export const projectTechnologies = sqliteTable("project_technologies", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  // Referensi ke UUID (text) projects
+  projectId: text("project_id")
     .notNull()
     .references(() => projects.id, { onDelete: "cascade" }),
+
+  // Referensi ke ID (integer) technologies
   technologyId: integer("technology_id")
     .notNull()
     .references(() => technologies.id, { onDelete: "cascade" }),
 });
 
+// Relasi tetap sama, Drizzle Relations API bekerja secara universal
 export const projectsRelations = relations(projects, ({ many }) => ({
   technologies: many(projectTechnologies),
 }));
@@ -63,7 +63,7 @@ export const projectTechnologiesRelations = relations(
 
 export type Project = typeof projects.$inferSelect;
 
-// Tipe lengkap dengan relasi technologies
+// Update type helper agar sesuai dengan struktur SQLite
 export type ProjectWithTechnologies = Project & {
   technologies: {
     id: number;

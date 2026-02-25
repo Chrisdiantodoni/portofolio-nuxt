@@ -1,10 +1,14 @@
-import { pgTable, serial, varchar, text } from "drizzle-orm/pg-core";
+import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 
-export const testimonials = pgTable("testimonials", {
-  id: serial("id").primaryKey(),
-  authorName: varchar("author_name", { length: 255 }).notNull(),
-  authorRole: varchar("author_role", { length: 255 }).notNull(),
-  authorCompany: varchar("author_company", { length: 255 }),
+export const testimonials = sqliteTable("testimonials", {
+  // SQLite menggunakan integer + autoIncrement untuk menggantikan serial
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  // Semua varchar (length) diubah menjadi text
+  authorName: text("author_name").notNull(),
+  authorRole: text("author_role").notNull(),
+  authorCompany: text("author_company"),
+
   content: text("content").notNull(),
   avatarUrl: text("avatar_url"),
 });

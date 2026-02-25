@@ -1,10 +1,16 @@
 <script setup lang="ts">
+const nuxtApp = useNuxtApp();
+
 const {
   data: homeData,
   pending,
   error,
-} = await useAsyncData("landing-home", () => $fetch("/api/landing/home"));
-
+} = await useAsyncData("landing-home", () => $fetch("/api/landing/home"), {
+  getCachedData: (key) => {
+    const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+    return cached;
+  },
+});
 const profile = computed(() => homeData.value?.profile);
 const seo = computed(() => homeData.value?.seo);
 
@@ -17,7 +23,7 @@ useSeoMeta({
   ogTitle: () => seo.value?.title || profile.value?.name,
   ogImage: () => profile.value?.avatarUrl, // Tambahan standar untuk SEO
 });
-console.log(homeData.value, "data");
+console.log(pending, "home");
 </script>
 
 <template>
@@ -42,7 +48,7 @@ console.log(homeData.value, "data");
       <LandingWorkExperience :page="homeData" />
     </UPageSection>
     <LandingBlog :page="homeData" />
-    <!-- <LandingTestimonials :page />
-    <LandingFAQ :page /> -->
+    <LandingTestimonials :page="homeData" />
+    <LandingFAQ :page="homeData" />
   </UPage>
 </template>

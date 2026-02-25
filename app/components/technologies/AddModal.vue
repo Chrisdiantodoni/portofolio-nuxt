@@ -148,7 +148,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             value-attribute="value"
             option-attribute="label"
             ignore-filter
-            @update:model-value="searchTerm = ''"
+            @update:model-value="
+              (val) => {
+                state.icon = typeof val === 'object' ? val.value : val;
+                searchTerm = '';
+              }
+            "
           >
             <template #leading>
               <UIcon

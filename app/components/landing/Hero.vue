@@ -24,16 +24,16 @@ const images = computed(() => {
   // 2. Filter hanya yang memiliki image_url (tidak null/undefined/kosong)
   // 3. Map ke format yang dibutuhkan NuxtImg
   const project_images = props.page.projects
-    ?.filter((item: any) => item?.image_url) // Hanya ambil yang ada gambarnya
+    ?.filter((item: any) => item?.imageUrl) // Hanya ambil yang ada gambarnya
     ?.map((item: any) => ({
-      src: item?.image_url,
+      src: item?.imageUrl,
       alt: item?.project_name || "Project Image",
     }));
 
   return project_images || [];
 });
 
-console.log(props.page);
+console.log(props.page.projects);
 </script>
 
 <template>

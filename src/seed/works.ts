@@ -3,7 +3,7 @@ import { db } from "../index";
 // Pastikan path ke db instance kamu benar
 import { workExperience } from "../db/schema/work";
 
-async function main() {
+export async function seedWorks() {
   console.log("🚀 Sedang menanam data (seeding)...");
 
   const data = [
@@ -49,4 +49,4 @@ async function main() {
   }
 }
 
-main();
+seedWorks();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, EditorToolbarItem } from "@nuxt/ui";
-import { statusOptions, useAboutForm } from "~/composables/form/useAboutForm";
+import { useAboutForm } from "~/composables/form/useAboutForm";
 import * as z from "zod";
 
 definePageMeta({
@@ -90,7 +90,7 @@ watchEffect(() => {
       name: d.name,
       email: d.email ?? "",
       location: d.location ?? "",
-      status: d.status ?? "",
+      isAvailable: d.isAvailable ?? true,
       headline: d.headline,
       shortBio: d.shortBio,
       longBio: d.longBio,
@@ -181,28 +181,19 @@ const cvPreview = computed(() => {
             />
           </UFormField>
 
-          <UFormField label="Current Status" name="status">
-            <USelectMenu
-              v-model="state.status"
-              :items="statusOptions as any[]"
-              value-attribute="value"
-              label-attribute="label"
-              placeholder="Select status"
-              class="w-full"
-            >
-              <template #leading>
-                <span
-                  class="w-2 h-2 rounded-full"
-                  :class="{
-                    'bg-green-500':
-                      state.status === 'Available for new projects',
-                    'bg-orange-500': state.status === 'Busy',
-                    'bg-red-500': state.status === 'Not Available',
-                    'bg-blue-500': state.status === 'On Vacation',
-                  }"
-                />
-              </template>
-            </USelectMenu>
+          <UFormField label="Available for New Projects?" name="isActive">
+            <div class="flex items-center gap-3">
+              <USwitch v-model="state.isAvailable" color="success" />
+              <span class="text-sm font-medium">
+                {{
+                  state.isAvailable ? "Yes, I am available" : "No, I am busy"
+                }}
+              </span>
+              <span
+                class="w-2 h-2 rounded-full"
+                :class="state.isAvailable ? 'bg-green-500' : 'bg-red-500'"
+              />
+            </div>
           </UFormField>
 
           <USeparator class="md:col-span-2" />

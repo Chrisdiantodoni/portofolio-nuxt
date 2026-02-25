@@ -31,7 +31,7 @@ export const api = {
     } catch (error: any) {
       // Error handling global agar tidak perlu try-catch berulang di UI
       const message = error.data?.message || "Terjadi kesalahan pada server";
-      console.log(message);
+      console.log({ error });
       throw error;
     }
   },

@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
       profile: profile || null,
       projects: allProjects || [],
       work_experiences: allExperiences || [],
-      blogs: allBlogs || [],
+      articles: allBlogs || [],
       testimonials: allTestimonials || [],
       faqs: allFaqs || [],
       seo: seo || null,

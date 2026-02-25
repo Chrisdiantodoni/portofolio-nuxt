@@ -9,17 +9,6 @@ if (!page.value) {
     fatal: true,
   });
 }
-const { data: posts } = await useAsyncData("blogs", () =>
-  queryCollection("blog").order("date", "DESC").all(),
-);
-if (!posts.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "blogs posts not found",
-    fatal: true,
-  });
-}
-console.log(posts.value, "page");
 
 useSeoMeta({
   title: page.value?.seo?.title || page.value?.title,
@@ -46,7 +35,7 @@ useSeoMeta({
         container: '!pt-0',
       }"
     >
-      <UBlogPosts orientation="vertical">
+      <!-- <UBlogPosts orientation="vertical">
         <Motion
           v-for="(post, index) in posts"
           :key="index"
@@ -71,7 +60,7 @@ useSeoMeta({
             }"
           />
         </Motion>
-      </UBlogPosts>
+      </UBlogPosts> -->
     </UPageSection>
   </UPage>
 </template>

@@ -4,7 +4,7 @@ import { db } from "../index";
 // Pastikan path ke db instance kamu benar
 import { articles } from "../db/schema/articles";
 
-async function seed() {
+export async function seedArticles() {
   await db.insert(articles).values([
     {
       title: "Menata Workspace Minimalis di MacBook Air",
@@ -28,4 +28,4 @@ async function seed() {
   console.log("Seed data articles berhasil!");
 }
 
-seed();
+seedArticles();

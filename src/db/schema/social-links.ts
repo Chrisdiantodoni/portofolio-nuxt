@@ -1,17 +1,18 @@
-import {
-  pgTable,
-  serial,
-  text,
-  varchar,
-  boolean,
-  integer,
-} from "drizzle-orm/pg-core";
+import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 
-export const socialLinks = pgTable("social_links", {
-  id: serial("id").primaryKey(),
-  platform: varchar("platform", { length: 50 }).notNull(), // Contoh: "Twitter", "GitHub"
+export const socialLinks = sqliteTable("social_links", {
+  // Serial diganti menjadi integer dengan autoIncrement
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  // Varchar diganti menjadi text
+  platform: text("platform").notNull(),
   url: text("url").notNull(),
-  icon: varchar("icon", { length: 100 }),
+  icon: text("icon"),
+
   sortOrder: integer("sort_order").default(0),
-  isActive: boolean("is_active").default(true),
+
+  // Boolean disimpan sebagai integer (0/1) dengan mode boolean
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
 });
+
+export type SocialLink = typeof socialLinks.$inferSelect;

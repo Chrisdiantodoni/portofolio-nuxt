@@ -2,7 +2,6 @@ import { db } from "../../src/index";
 import { pageViews } from "../../src/db/schema/schema";
 
 export default defineEventHandler(async (event) => {
-  return;
   const url = getRequestURL(event);
   const path = url.pathname;
 

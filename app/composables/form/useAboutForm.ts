@@ -2,17 +2,6 @@
 import * as z from "zod";
 import { reactive } from "vue";
 
-export const statusOptions = [
-  {
-    label: "Available for new projects",
-    value: "Available for new projects",
-    color: "green",
-  },
-  { label: "Busy / Working on projects", value: "Busy", color: "orange" },
-  { label: "Not Available", value: "Not Available", color: "red" },
-  { label: "On Vacation", value: "On Vacation", color: "blue" },
-];
-
 export const useAboutForm = () => {
   // 1. Schema Validasi
   const schema = z.object({
@@ -27,6 +16,7 @@ export const useAboutForm = () => {
     // Karena ini file, validasi di zod bisa dibuat lebih fleksibel
     // atau divalidasi manual saat proses upload
     avatarUrl: z.any().optional(),
+    isAvailable: z.boolean().default(true),
     cvUrl: z.any().optional(),
   });
 
@@ -39,7 +29,7 @@ export const useAboutForm = () => {
     longBio: "",
     about_page: "",
     location: "",
-    status: statusOptions[0]?.value ?? "",
+    isAvailable: true,
     email: "",
     avatarUrl: null as any | File | string | null, // Bisa berupa file baru atau URL string yang sudah ada
     cvUrl: null as any,

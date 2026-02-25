@@ -2,22 +2,11 @@
 defineProps<{
   page: any;
 }>();
-
-const { data: posts } = await useAsyncData("index-blogs", () =>
-  queryCollection("blog").order("date", "DESC").limit(3).all(),
-);
-if (!posts.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "blogs posts not found",
-    fatal: true,
-  });
-}
 </script>
 
 <template>
   <UPageSection
-    v-if="page?.blogs?.length > 0"
+    v-if="page?.articles?.length > 0"
     title="Latest Article"
     description="Some of my recent thoughts"
     :ui="{
@@ -28,12 +17,13 @@ if (!posts.value) {
   >
     <UBlogPosts orientation="vertical" class="gap-4 lg:gap-y-4">
       <UBlogPost
-        v-for="(post, index) in posts"
+        v-for="(post, index) in page.articles"
         :key="index"
         orientation="horizontal"
         variant="naked"
         v-bind="post"
-        :to="post.path"
+        :date="formatDate(post.publishedAt)"
+        :to="`/blog/${post.slug}`"
         :ui="{
           root: 'group relative lg:items-start lg:flex ring-0 hover:ring-0',
           body: '!px-0',

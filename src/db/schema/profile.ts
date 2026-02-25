@@ -1,15 +1,23 @@
-import { integer, pgTable, varchar, text, serial } from "drizzle-orm/pg-core";
+import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 
-export const profile = pgTable("profile", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  headline: varchar("headline", { length: 255 }).notNull(),
-  shortBio: text("short_bio").notNull(), // "I craft intuitive..."
-  longBio: text("long_bio").notNull(), // "As a UX/UI designer..."
-  about_page: text("about_page").notNull(), // "As a UX/UI designer..."
-  location: varchar("location", { length: 100 }),
-  status: varchar("status", { length: 100 }), // "Available for new projects"
-  email: varchar("email", { length: 255 }),
+export const profile = sqliteTable("profile", {
+  // SQLite menggunakan integer + autoIncrement untuk menggantikan serial
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  // Semua varchar diubah menjadi text
+  name: text("name").notNull(),
+  headline: text("headline").notNull(),
+  shortBio: text("short_bio").notNull(),
+  longBio: text("long_bio").notNull(),
+  about_page: text("about_page").notNull(),
+  isAvailable: integer("is_available", { mode: "boolean" }).default(true),
+  location: text("location"),
+  status: text("status"),
+  email: text("email"),
   avatarUrl: text("avatar_url"),
   cvUrl: text("cv_url"),
 });
+
+// Type inference untuk mempermudah penggunaan di komponen UI
+export type Profile = typeof profile.$inferSelect;
+export type UpdateProfile = typeof profile.$inferInsert;

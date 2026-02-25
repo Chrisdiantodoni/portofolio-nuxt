@@ -9,12 +9,14 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "db:seed": "tsx src/seed/index.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.15",
     "@iconify-json/lucide": "^1.2.89",
     "@iconify-json/simple-icons": "^1.2.70",
+    "@libsql/client": "^0.17.0",
     "@neondatabase/serverless": "^1.0.2",
     "@nuxt/content": "^3.11.2",
     "@nuxt/image": "^2.0.0",

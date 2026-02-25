@@ -3,7 +3,7 @@ import { users } from "../db/schema/schema";
 import bcrypt from "bcrypt"; // Import ini
 import { db } from "../index";
 
-const main = async () => {
+export const seedUsers = async () => {
   console.log("🌱 Seeding users...");
 
   // 1. Tentukan password mentah yang mau dipakai
@@ -27,7 +27,7 @@ const main = async () => {
   process.exit(0);
 };
 
-main().catch((err) => {
+seedUsers().catch((err) => {
   console.error("❌ Error:", err);
   process.exit(1);
 });

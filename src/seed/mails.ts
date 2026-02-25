@@ -3,7 +3,7 @@ import "dotenv/config";
 import { db } from "../index";
 import { mails } from "../db/schema/messages";
 
-async function seed() {
+export async function seedMails() {
   console.log("🌱 Seeding database...");
 
   const dummyMails = [
@@ -61,4 +61,4 @@ async function seed() {
   }
 }
 
-seed();
+seedMails();
