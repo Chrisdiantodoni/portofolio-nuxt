@@ -15,6 +15,7 @@ export const profile = sqliteTable("profile", {
   status: text("status"),
   email: text("email"),
   avatarUrl: text("avatar_url"),
+  aboutImgUrl: text("about_image_url"),
   cvUrl: text("cv_url"),
 });
 

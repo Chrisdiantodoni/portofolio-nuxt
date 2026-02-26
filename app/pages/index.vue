@@ -1,18 +1,9 @@
 <script setup lang="ts">
 const nuxtApp = useNuxtApp();
 
-const {
-  data: homeData,
-  pending,
-  error,
-} = await useAsyncData("landing-home", () => $fetch("/api/landing/home"), {
-  getCachedData: (key) => {
-    const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-    return cached;
-  },
-});
-const profile = computed(() => homeData.value?.profile);
-const seo = computed(() => homeData.value?.seo);
+const { data, status, refresh } = await useFetch("/api/landing/home");
+const profile = computed(() => data.value?.profile);
+const seo = computed(() => data.value?.seo);
 
 useSeoMeta({
   title: () => seo.value?.title || profile.value?.name || "Portfolio",
@@ -23,21 +14,12 @@ useSeoMeta({
   ogTitle: () => seo.value?.title || profile.value?.name,
   ogImage: () => profile.value?.avatarUrl, // Tambahan standar untuk SEO
 });
-console.log(pending, "home");
+
+const homeData = computed(() => data?.value);
 </script>
 
 <template>
-  <div v-if="pending" class="flex h-96 items-center justify-center">
-    <UIcon
-      name="i-heroicons-arrow-path"
-      class="animate-spin size-10 text-primary"
-    />
-  </div>
-  <div v-else-if="error || !homeData" class="text-center py-20">
-    <p>Gagal memuat data dari Neon.</p>
-    <UButton label="Refresh" @click="refreshNuxtData('landing-home')" />
-  </div>
-  <UPage v-else :key="homeData?.profile?.id">
+  <UPage v-if="homeData">
     <LandingHero :page="homeData" />
     <UPageSection
       :ui="{

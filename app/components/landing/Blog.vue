@@ -21,6 +21,7 @@ defineProps<{
         :key="index"
         orientation="horizontal"
         variant="naked"
+        :description="post.description"
         v-bind="post"
         :date="formatDate(post.publishedAt)"
         :to="`/blog/${post.slug}`"

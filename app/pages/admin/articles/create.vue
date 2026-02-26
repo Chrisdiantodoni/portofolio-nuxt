@@ -42,6 +42,7 @@ async function onSubmit() {
   const formData = new FormData();
 
   formData.append("title", state.title);
+  formData.append("body", state.body);
   formData.append("description", state.description);
   formData.append("publishedAt", state.publishedAt || "");
 
@@ -148,9 +149,17 @@ async function onSubmit() {
         </div>
       </div>
 
-      <UFormField label="Content" name="description">
-        <UEditor
+      <UFormField label="Description" name="description">
+        <UTextarea
           v-model="state.description"
+          placeholder="Contoh: Tutorial Docker Stardew Valley"
+          size="lg"
+          class="w-full min-h-30"
+        />
+      </UFormField>
+      <UFormField label="Content" name="body">
+        <UEditor
+          v-model="state.body"
           v-slot="{ editor }"
           content-type="markdown"
           placeholder="Write your professional headline..."
@@ -163,7 +172,6 @@ async function onSubmit() {
           />
         </UEditor>
       </UFormField>
-
       <div class="flex justify-end gap-3 pt-6 border-t">
         <UButton
           label="Cancel"

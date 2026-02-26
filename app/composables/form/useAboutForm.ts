@@ -16,6 +16,7 @@ export const useAboutForm = () => {
     // Karena ini file, validasi di zod bisa dibuat lebih fleksibel
     // atau divalidasi manual saat proses upload
     avatarUrl: z.any().optional(),
+    aboutImgUrl: z.any().optional(),
     isAvailable: z.boolean().default(true),
     cvUrl: z.any().optional(),
   });
@@ -32,6 +33,7 @@ export const useAboutForm = () => {
     isAvailable: true,
     email: "",
     avatarUrl: null as any | File | string | null, // Bisa berupa file baru atau URL string yang sudah ada
+    aboutImgUrl: null as any | File | string | null, // Bisa berupa file baru atau URL string yang sudah ada
     cvUrl: null as any,
   };
 

@@ -14,10 +14,10 @@ async function main() {
     // Gunakan urutan yang logis (User dulu, baru artikel/work yang refer ke user)
     // await seedUsers();
     // await seedWorks();
-    // await seedArticles();
+    await seedArticles();
     // await seedMails();
     // await seedTestimonials();
-    await seedProjects();
+    // await seedProjects();
     // await seedFaqs();
 
     console.log("✅ All data seeded successfully!");

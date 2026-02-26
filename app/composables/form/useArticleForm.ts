@@ -4,6 +4,7 @@ import { reactive } from "vue";
 export const articleSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
+  body: z.string().min(10, "Deskripsi minimal 10 karakter"),
   publishedAt: z.string().nonempty("Tanggal terbit harus diisi"),
   imageUrl: z.any().optional(),
 });
@@ -12,6 +13,7 @@ export const useArticleForm = () => {
   const state = reactive({
     title: "",
     description: "",
+    body: "",
     publishedAt: new Date().toISOString().split("T")[0], // Default ke hari ini
     imageUrl: undefined as any,
   });
@@ -19,6 +21,7 @@ export const useArticleForm = () => {
   const resetForm = () => {
     state.title = "";
     state.description = "";
+    state.body = "";
     state.publishedAt = new Date().toISOString().split("T")[0];
     state.imageUrl = undefined;
   };
@@ -26,6 +29,7 @@ export const useArticleForm = () => {
   const setFormData = (data: any) => {
     state.title = data.title;
     state.description = data.description;
+    state.body = data.body;
     state.publishedAt = data.publishedAt;
     state.imageUrl = data.imageUrl;
   };

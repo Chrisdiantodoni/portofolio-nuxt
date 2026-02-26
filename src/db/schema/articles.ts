@@ -28,6 +28,7 @@ export const articles = sqliteTable("articles", {
 
   // SQLite tidak memiliki tipe 'boolean' murni; gunakan integer (0 atau 1)
   isActive: integer("is_active", { mode: "boolean" }).default(true),
+  body: text("body"),
 
   slug: text("slug").unique().notNull(),
   imageUrl: text("image_url"),

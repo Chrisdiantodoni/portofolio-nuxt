@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 
     const data: Record<string, string> = {};
     let avatarBuffer: Buffer | null = null;
+    let abtImgBuffer: Buffer | null = null;
     let cvBuffer: Buffer | null = null;
 
     // 1. Ekstrak Data dengan Validasi Buffer
@@ -26,6 +27,12 @@ export default defineEventHandler(async (event) => {
 
       if (item.name === "avatarUrl" && item.filename && item.data.length > 10) {
         avatarBuffer = item.data;
+      } else if (
+        item.name === "aboutImgUrl" &&
+        item.filename &&
+        item.data.length > 10
+      ) {
+        abtImgBuffer = item.data;
       } else if (
         item.name === "cvUrl" &&
         item.filename &&
@@ -43,6 +50,20 @@ export default defineEventHandler(async (event) => {
       .from(profile)
       .where(eq(profile.id, 1))
       .limit(1);
+
+    let abtImgUrl = existing?.aboutImgUrl || "";
+    if (abtImgBuffer) {
+      const abtImgResult = (await uploadToCloudinary(abtImgBuffer, {
+        folder: "portfolio/avatars",
+        resource_type: "image",
+        transformation: [
+          // Menghapus width, height, crop, gravity, dan radius: "max"
+          { fetch_format: "auto" }, // Menggunakan "auto" lebih baik daripada memaksa "png" untuk optimasi size
+          { quality: "auto" }, // Menjaga kualitas tetap optimal tanpa merusak visual
+        ],
+      })) as any;
+      abtImgUrl = abtImgResult.secure_url;
+    }
 
     // 2. Upload Avatar (Jika ada buffer baru)
     let avatarUrl = existing?.avatarUrl || "";
@@ -80,7 +101,12 @@ export default defineEventHandler(async (event) => {
       shortBio: data.shortBio ?? existing?.shortBio ?? "",
       longBio: data.longBio ?? existing?.longBio ?? "",
       about_page: data.about_page ?? existing?.about_page ?? "",
+      aboutImgUrl: abtImgUrl,
       avatarUrl: avatarUrl,
+      isAvailable:
+        data.isAvailable !== undefined
+          ? String(data.isAvailable) === "true"
+          : (existing?.isAvailable ?? false),
       cvUrl: cvUrl,
     };
 

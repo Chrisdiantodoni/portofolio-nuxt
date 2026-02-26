@@ -45,6 +45,7 @@ export default defineEventHandler(async (event) => {
       .values({
         title: data.title,
         description: data.description,
+        body: data.body,
         publishedAt: data.publishedAt, // Format "YYYY-MM-DD"
         slug: finalSlug,
         imageUrl: imageUrl,

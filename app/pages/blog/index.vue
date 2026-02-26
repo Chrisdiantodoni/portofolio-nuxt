@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData("blog-page", () => {
+const { data, pending } = await useAsyncData("blog-list", () =>
+  $fetch("/api/landing/blog"),
+);
+const { data: page } = await useAsyncData<any>("blog-page", () => {
+  // @ts-ignore atau cast as any
   return queryCollection("pages").path("/blog").first();
 });
 if (!page.value) {
@@ -9,12 +13,29 @@ if (!page.value) {
     fatal: true,
   });
 }
+const placeholder =
+  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800";
+
+const seo = computed(() => data?.value?.seo);
+
+const posts = computed(() => {
+  const list_posts = data?.value?.articles?.map((item) => ({
+    title: item?.title,
+    description: item?.description,
+    image: item?.imageUrl ?? placeholder,
+    date: item?.publishedAt,
+    path: `/blog/${item?.slug}`,
+    to: `/blog/${item?.slug}`,
+  }));
+  return list_posts || [];
+});
 
 useSeoMeta({
-  title: page.value?.seo?.title || page.value?.title,
-  ogTitle: page.value?.seo?.title || page.value?.title,
-  description: page.value?.seo?.description || page.value?.description,
-  ogDescription: page.value?.seo?.description || page.value?.description,
+  title: seo?.value?.title || page.value?.title,
+  ogTitle: seo?.value?.seo?.title || page.value?.title,
+  description: seo?.value?.description || page.value?.description,
+  ogDescription: seo?.value?.seo?.description || page.value?.description,
+  ogImage: seo?.value?.seo?.image || posts.value[0]?.image,
 });
 </script>
 
@@ -35,7 +56,7 @@ useSeoMeta({
         container: '!pt-0',
       }"
     >
-      <!-- <UBlogPosts orientation="vertical">
+      <UBlogPosts orientation="vertical">
         <Motion
           v-for="(post, index) in posts"
           :key="index"
@@ -47,7 +68,6 @@ useSeoMeta({
           <UBlogPost
             variant="naked"
             orientation="horizontal"
-            :to="post.path"
             v-bind="post"
             :ui="{
               root: 'md:grid md:grid-cols-2 group overflow-visible transition-all duration-300',
@@ -60,7 +80,7 @@ useSeoMeta({
             }"
           />
         </Motion>
-      </UBlogPosts> -->
+      </UBlogPosts>
     </UPageSection>
   </UPage>
 </template>

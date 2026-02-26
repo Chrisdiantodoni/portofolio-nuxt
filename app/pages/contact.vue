@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { useNavStore } from "~/stores/nav";
 
 const schema = z.object({
   senderName: z.string().min(2, "Name must be at least 2 characters"),
@@ -12,19 +13,21 @@ const schema = z.object({
 type Schema = z.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  senderName: undefined,
-  senderEmail: undefined,
-  subject: undefined,
-  body: undefined,
+  senderName: "",
+  senderEmail: "",
+  subject: "",
+  body: "",
 });
 
 const loading = ref(false);
 const toast = useToast();
 
+const { footer } = useNavStore();
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
   try {
-    await $fetch("/api/mails", {
+    await $fetch("/api/landing/mail", {
       method: "POST",
       body: event.data,
     });
@@ -103,24 +106,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
             <div class="flex gap-3 mt-5">
               <UButton
-                icon="i-simple-icons-github"
-                color="info"
-                variant="ghost"
-                to="#"
-                target="_blank"
-              />
-              <UButton
-                icon="i-simple-icons-linkedin"
-                color="info"
-                variant="ghost"
-                to="#"
-                target="_blank"
-              />
-              <UButton
-                icon="i-simple-icons-x"
-                color="info"
-                variant="ghost"
-                to="#"
+                v-for="value in footer"
+                v-bind="{ color: 'neutral', variant: 'ghost', ...value }"
                 target="_blank"
               />
             </div>

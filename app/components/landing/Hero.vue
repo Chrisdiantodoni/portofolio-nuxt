@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { IndexCollectionItem } from "@nuxt/content";
 
-const { global } = useAppConfig();
-
 const props = defineProps<{
   page: any;
 }>();
@@ -32,8 +30,6 @@ const images = computed(() => {
 
   return project_images || [];
 });
-
-console.log(props.page.projects);
 </script>
 
 <template>
@@ -66,7 +62,7 @@ console.log(props.page.projects);
           class="size-28 ring ring-default ring-offset-3 ring-offset-(--ui-bg)"
           :light="props.page?.profile?.avatarUrl || ''"
           :dark="props.page?.profile?.avatarUrl || ''"
-          :alt="global.picture?.alt!"
+          :alt="props.page?.profile?.name"
         />
       </Motion>
     </template>
@@ -148,12 +144,11 @@ console.log(props.page.projects);
           target="_blank"
         />
         <UButton
-          :color="global.available ? 'success' : 'error'"
+          :color="props.page.profile.isAvailable ? 'success' : 'error'"
           variant="ghost"
           class="gap-2"
-          :to="global.available ? global.meetingLink : ''"
           :label="
-            global.available
+            props.page.profile.isAvailable
               ? 'Available for new projects'
               : 'Not available at the moment'
           "
@@ -163,12 +158,16 @@ console.log(props.page.projects);
               <span
                 class="absolute inline-flex size-full rounded-full opacity-75"
                 :class="
-                  global.available ? 'bg-success animate-ping' : 'bg-error'
+                  props.page.profile.isAvailable
+                    ? 'bg-success animate-ping'
+                    : 'bg-error'
                 "
               />
               <span
                 class="relative inline-flex size-2 scale-90 rounded-full"
-                :class="global.available ? 'bg-success' : 'bg-error'"
+                :class="
+                  props.page.profile.isAvailable ? 'bg-success' : 'bg-error'
+                "
               />
             </span>
           </template>

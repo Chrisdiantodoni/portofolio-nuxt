@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData("projects-page", () => {
+const { data: page } = await useAsyncData<any>("projects-page", () => {
   // @ts-ignore atau cast as any
   return queryCollection("pages").path("/projects").first();
 });
@@ -45,11 +45,32 @@ const projects = computed(() => {
 });
 const { global } = useAppConfig();
 
+const seo = computed(() => data?.value?.seo);
+
 useSeoMeta({
-  title: page.value?.seo?.title || page.value?.title,
-  ogTitle: page.value?.seo?.title || page.value?.title,
-  description: page.value?.seo?.description || page.value?.description,
-  ogDescription: page.value?.seo?.description || page.value?.description,
+  title: () =>
+    page.value?.seo?.title ||
+    page.value?.title ||
+    projects.value?.[0]?.title ||
+    "Projects",
+  ogTitle: () =>
+    page.value?.seo?.title ||
+    page.value?.title ||
+    projects.value?.[0]?.title ||
+    "Projects",
+
+  // Pastikan deskripsi tidak undefined
+  description: () =>
+    page.value?.seo?.description ||
+    page.value?.description ||
+    projects.value?.[0]?.description ||
+    "",
+  ogDescription: () =>
+    page.value?.seo?.description ||
+    page.value?.description ||
+    projects.value?.[0]?.description ||
+    "",
+  ogImage: seo?.value?.seo?.image,
 });
 </script>
 

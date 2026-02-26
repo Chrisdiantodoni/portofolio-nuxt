@@ -45,7 +45,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (event.data.name) formData.append("name", event.data.name);
     if (event.data.email) formData.append("email", event.data.email);
     if (event.data.location) formData.append("location", event.data.location);
-    if (event.data.status) formData.append("status", event.data.status);
+    if (event.data.isAvailable !== undefined) {
+      formData.append("isAvailable", String(event.data.isAvailable));
+    }
     if (event.data.headline) formData.append("headline", event.data.headline);
     if (event.data.shortBio) formData.append("shortBio", event.data.shortBio);
     if (event.data.longBio) formData.append("longBio", event.data.longBio);
@@ -55,6 +57,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     // Append avatar file jika ada
     if (event.data.avatarUrl) {
       formData.append("avatarUrl", event.data.avatarUrl);
+    }
+
+    if (event.data.aboutImgUrl) {
+      formData.append("aboutImgUrl", event.data.aboutImgUrl);
     }
 
     // Append CV file jika ada
@@ -80,12 +86,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
 }
 const existingAvatarUrl = ref("");
+const existingAbtImageUrl = ref("");
 const existingCvUrl = ref("");
+
 watchEffect(() => {
   if (data.value?.success && data.value?.data) {
     const d = data.value.data;
     existingAvatarUrl.value = d.avatarUrl || "";
     existingCvUrl.value = d.cvUrl || "";
+    existingAbtImageUrl.value = d.aboutImgUrl || "";
     setFormData({
       name: d.name,
       email: d.email ?? "",
@@ -97,6 +106,7 @@ watchEffect(() => {
       about_page: d.about_page,
       avatarUrl: null,
       cvUrl: null,
+      aboutImgUrl: null,
     });
   }
 });
@@ -112,6 +122,19 @@ const avatarPreview = computed(() => {
 
   // 2. Jika tidak ada file baru, tampilkan URL lama dari database
   return existingAvatarUrl.value || null;
+});
+
+const aboutPreview = computed(() => {
+  const avatar = state.aboutImgUrl;
+
+  // 1. Jika ada file baru yang dipilih di UFileUpload
+  // UFileUpload biasanya mengembalikan Array [File]
+  if (avatar instanceof File) {
+    return URL.createObjectURL(avatar);
+  }
+
+  // 2. Jika tidak ada file baru, tampilkan URL lama dari database
+  return existingAbtImageUrl.value || null;
 });
 
 const cvPreview = computed(() => {
@@ -277,6 +300,23 @@ const cvPreview = computed(() => {
                 v-model="state.avatarUrl"
                 accept="image/*"
                 label="Upload avatar"
+                class="w-full"
+              />
+            </div>
+          </UFormField>
+
+          <UFormField label="About Image" name="avatarUrl">
+            <div class="flex items-center gap-5">
+              <UAvatar
+                :src="aboutPreview || ''"
+                :alt="'About'"
+                size="xl"
+                class="ring-2 ring-primary-500 bg-gray-100 dark:bg-gray-800 shadow-sm"
+              />
+              <UFileUpload
+                v-model="state.aboutImgUrl"
+                accept="image/*"
+                label="Upload About Image"
                 class="w-full"
               />
             </div>
